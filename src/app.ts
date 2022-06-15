@@ -102,8 +102,13 @@ const app = async () => {
 
 
   if (sum.match('Prévia')) {
-    cell.atividade = sum.match(/(?<=Prévia para).*?(?=a ser implantada)/g) ||
-    sum.match(/(?<=Prévia).*?(?=situada)/g)
+    if (sum.match('a ser implantada')) {
+      cell.atividade = sum.match(/(?<=Prévia para).*?(?=a ser implantada)/g)
+    } else {
+      cell.atividade = sum.match(/(?<=Prévia).*?(?=situada)/g)
+    }
+
+    
   }
 
   if (sum.match('Instalação')) {
