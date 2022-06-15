@@ -58,6 +58,9 @@ const app = async () => {
 
  let edit = ''
  sumulas.map((sum,index) => {
+
+  if (!sum.match('AUTORIZAÇÃO AMBIENTAL') || !sum.match('AUTORIZAÇÃO FLORESTAL')) {
+
   const cell = {
     cnpj:'',
     edicao:'',
@@ -76,7 +79,7 @@ const app = async () => {
 
   cell.sumulas = sum
   cell.cnpj =  sum.match(/[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/g)
-  cell.local = sum.match(/(implantada | instalada).*/g)
+  cell.local = sum.match(/(?<=implantada | instalada).*/g)?.join('').replace('na','')
 
 
   if (sum.match('INSTALAÇÃO')) {
@@ -183,7 +186,7 @@ const app = async () => {
   worksheet.cell(2 + index,7).string(cell.sumulas)
 
   console.log(cell)
-
+}
  })
 
   workbook.write('./output/Excel.xlsx');
