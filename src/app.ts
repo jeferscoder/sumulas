@@ -31,8 +31,8 @@ const app = async () => {
 
 
  console.log('separando as sumulas')
- const sumulas = uniques.split(/\d{0,9}\/(2020|2021)/g)
- const protocolos = uniques.match(/\d{0,9}\/(2020|2021)/g)
+ const sumulas = uniques.split(/\d{5,9}\/2020|\d{5,9}\/2021/g)
+ const protocolos = uniques.match(/\d{5,9}\/2020|\d{5,9}\/2021/g)
 
  //const sumulas = uniques.match()
  
