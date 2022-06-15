@@ -3,6 +3,7 @@ import excel from "excel4node";
 import cluster from 'cluster';
 import os from 'os';
 import fs from 'fs';
+import { match } from "assert";
 // /SÚMULA(.*?)\d{5}\/2020/g
 
 const numOfCpuCores = os.cpus().length
@@ -100,10 +101,40 @@ const app = async () => {
   }
 
 
-  if (sum.match('Licença Prévia')) {
-    cell.atividade = 'Recebimento de Licença Prévia - CIS'
+  if (sum.match('Prévia')) {
+    cell.atividade = sum.match(/(?<=Prévia para).*?(?=a ser implantada)/g) ||
+    sum.match(/(?<=Prévia).*?(?=situada)/g)
   }
 
+  if (sum.match('Instalação')) {
+    cell.atividade = sum.match(/(?<=Instalação para).*?(?=a ser implantada)/g)
+  }
+
+  if (sum.match('Operação')) {
+    cell.atividade = sum.match(/(?<=Operação para).*?(?=Licença)/g) || sum.match(/(?<=Operação para).*?(?=instalada)/g) || 
+    sum.match(/(?<=Operação).*?(?=situada)/g)
+  }
+
+  if (sum.match('Simplificada')) {
+
+    if (sum.match('a ser implantada')) {
+    cell.atividade = sum.match(/(?<=Simplificada para).*?(?=a ser implantada)/g)
+    } else {
+      cell.atividade = sum.match(/(?<=Simplificada para).*?(?=implantada)/g) 
+    }
+
+    
+  }
+
+  if (sum.match('Regularização')) {
+    cell.atividade = sum.match(/(?<=Regularização para).*?(?=instalada)/g)
+  }
+
+  if (sum.match('Ambiental')) {
+    cell.atividade = sum.match(/(?<=Regularização para).*?(?=instalada)/g)
+  }
+
+  /*
   if (sum.match('Renovação de Licença de Operação')) {
     cell.atividade = 'Recebimento de Renovação de Licença de Operação - CIS'
   }
@@ -137,7 +168,7 @@ const app = async () => {
   if (sum.match('Licença Simplificada')) {
     cell.atividade = 'Recebimento de Licença Simplificada - CIS'
   }
-
+  */
 
   worksheet.cell(2 + index,2).string(cell.cnpj)
   worksheet.cell(2 + index,3).string(cell.local)
